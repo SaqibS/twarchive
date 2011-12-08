@@ -4,12 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Xml.Linq;
 
     internal static class Twitter
     {
         private const int MaxTweetsThatCanBeRetrieved = 3200;
-        private const int TweetsPerPage = 50;
+        private const int TweetsPerPage = 20;
         private const int PagesToProcess = MaxTweetsThatCanBeRetrieved / TweetsPerPage;
 
         public static List<Tweet> DownloadAllTweets(string username)
@@ -40,7 +41,10 @@
                 {
                     break;
                 }
+
                 tweets.AddRange(newTweets);
+
+                Thread.Sleep(1000);
             }
 
             return tweets;
