@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
 
     internal static class Program
     {
@@ -37,10 +38,7 @@
                     Console.WriteLine("Downloaded {0} tweets", tweets.Count);
                 }
 
-                using (StreamWriter sw = new StreamWriter(filename))
-                {
-                    tweets.ForEach(x => sw.WriteLine("{0}\t{1}\t{2}", x.Id, x.Text, x.CreatedAt));
-                }
+                    File.WriteAllLines(filename, tweets.Select(x => string.Format("{0}\t{1}\t{2}", x.Id, x.Text, x.CreatedAt)), Encoding.UTF8);
             }
             catch (Exception x)
             {

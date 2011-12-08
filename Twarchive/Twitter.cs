@@ -8,16 +8,20 @@
 
     internal static class Twitter
     {
+        private const int MaxTweetsThatCanBeRetrieved = 3200;
+        private const int TweetsPerPage = 50;
+        private const int PagesToProcess = MaxTweetsThatCanBeRetrieved / TweetsPerPage;
+
         public static List<Tweet> DownloadAllTweets(string username)
         {
-            string urlPrefix = "http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=" + username + "&include_rts=true&exclude_replies=true&count=20&page=";
+            string urlPrefix = string.Format("http://api.twitter.com/1/statuses/user_timeline.xml?screen_name={0}&include_rts=true&exclude_replies=true&count={1}&page=", username, TweetsPerPage);
             return DownloadTweets(urlPrefix);
         }
 
         public static int DownloadNewTweets(string username, List<Tweet> tweets)
         {
             string lastId = tweets.First().Id;
-            string urlPrefix = "http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=" + username + "&since_id=" + lastId + "&include_rts=true&exclude_replies=true&count=20&page=";
+            string urlPrefix = string.Format("http://api.twitter.com/1/statuses/user_timeline.xml?screen_name={0}&since_id={1}&include_rts=true&exclude_replies=true&count={2}&page=", username, lastId, TweetsPerPage);
             List<Tweet> newTweets = DownloadTweets(urlPrefix);
             tweets.InsertRange(0, newTweets);
             return newTweets.Count;
@@ -27,9 +31,10 @@
         {
             var tweets = new List<Tweet>();
             var wc = new WebClient();
-            for (int i = 1; i <= 160; i++)
+            for (int page = 1; page <= PagesToProcess; page++)
             {
-                string xml = wc.DownloadString(urlPrefix+i);
+                string url = urlPrefix + page;
+                string xml = wc.DownloadString(url);
                 List<Tweet> newTweets = ParseXml(xml);
                 if (newTweets.Count == 0)
                 {
