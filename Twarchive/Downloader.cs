@@ -13,9 +13,9 @@
 
         static Downloader()
         {
-        webClient=new WebClient();
-        webClient.Encoding = Encoding.UTF8;
-    }
+            webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+        }
 
         public static string Download(string url)
         {

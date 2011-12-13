@@ -35,28 +35,28 @@
                 url += "&max_id=" + maxId;
             }
 
-                string xml = Downloader.Download(url);
-                List<Tweet> newTweets = ParseXml(xml);
-                if (newTweets.Count == 0)
-                {
-                    return newTweets;
-                }
-                else
-                {
-                    string newMaxId = (long.Parse(newTweets.Last().Id)-1).ToString();
-                    newTweets.AddRange(DownloadTweets(username, sinceId, newMaxId));
-                    return newTweets;
-                }
+            string xml = Downloader.Download(url);
+            List<Tweet> newTweets = ParseXml(xml);
+            if (newTweets.Count == 0)
+            {
+                return newTweets;
             }
+            else
+            {
+                string newMaxId = (long.Parse(newTweets.Last().Id) - 1).ToString();
+                newTweets.AddRange(DownloadTweets(username, sinceId, newMaxId));
+                return newTweets;
+            }
+        }
 
         private static List<Tweet> ParseXml(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
             return doc.Root.Descendants("status").Select(x => new Tweet()
             {
-                Id=x.Element("id").Value,
-                Text=HttpUtility.HtmlDecode(x.Element("text").Value).Split('\n')[0],
-                CreatedAt=x.Element("created_at").Value
+                Id = x.Element("id").Value,
+                Text = HttpUtility.HtmlDecode(x.Element("text").Value).Split('\n')[0],
+                CreatedAt = x.Element("created_at").Value
             }).ToList();
         }
     }
