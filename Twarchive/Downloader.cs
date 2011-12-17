@@ -7,7 +7,7 @@
 
     internal static class Downloader
     {
-        private const int NumRetries = 3;
+        private const int NumRetries = 10;
 
         private static WebClient webClient;
 
@@ -17,6 +17,13 @@
             webClient.Encoding = Encoding.UTF8;
         }
 
+        /// <summary>
+        /// Downloads the contents of a URL
+        /// Retries downloading after increasing delays
+        /// Throws an exception after failing N=10 times
+        /// </summary>
+        /// <param name="url">The URL to download</param>
+        /// <returns>The contents of the URL</returns>
         public static string Download(string url)
         {
             for (int i = 1; i <= NumRetries; i++)
@@ -33,7 +40,7 @@
                     }
                     else
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(i * 1000);
                     }
                 }
             }

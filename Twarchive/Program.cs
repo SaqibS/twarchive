@@ -8,6 +8,12 @@
 
     internal static class Program
     {
+        /// <summary>
+        /// Main method
+        /// If no data file is found for the given user, downloads all tweets
+        /// Otherwise loads the tweets and updates the list
+        /// </summary>
+        /// <param name="args">Command line arguments - expects a single parameter, namely a Twitter username</param>
         internal static void Main(string[] args)
         {
             try
@@ -48,7 +54,6 @@
                     Console.Write(" - {0}", x.InnerException.Message);
                 }
                 Console.WriteLine();
-                Console.WriteLine(x.StackTrace);
             }
         }
     }
